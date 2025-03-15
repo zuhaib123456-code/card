@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mixed Flower Garden Proposal</title>
+    <style>
+        body {
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            overflow: hidden;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', cursive;
+        }
+
+        .garden {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .flower {
+            position: absolute;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Rose Styles */
+        .rose .petals {
+            width: 80px;
+            height: 80px;
+        }
+
+        .rose .petal {
+            width: 25px;
+            height: 40px;
+            background: linear-gradient(45deg, #c41e3a, #ff0066);
+            border-radius: 10px 20px;
+            box-shadow: 0 0 15px #ff006666;
+        }
+
+        .rose .center {
+            background: #ffd700;
+            width: 20px;
+            height: 20px;
+            top: 30px;
+            left: 30px;
+        }
+
+        /* Sunflower Styles */
+        .sunflower .petals {
+            width: 100px;
+            height: 100px;
+        }
+
+        .sunflower .petal {
+            width: 35px;
+            height: 70px;
+            background: linear-gradient(45deg, #ffd700, #ffaa00);
+            border-radius: 5px 20px;
+        }
+
+        .sunflower .center {
+            background: #654321;
+            width: 40px;
+            height: 40px;
+            top: 30px;
+            left: 30px;
+        }
+
+        /* Tulip Styles */
+        .tulip .petals {
+            width: 60px;
+            height: 80px;
+        }
+
+        .tulip .petal {
+            width: 30px;
+            height: 50px;
+            background: linear-gradient(45deg, #ff1493, #ff69b4);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .tulip .center {
+            background: #ffff00;
+            width: 15px;
+            height: 15px;
+            top: 40px;
+            left: 22px;
+        }
+
+        .petals {
+            position: relative;
+            animation: bloom 2s ease-out forwards;
+        }
+
+        .petal {
+            position: absolute;
+            transform-origin: bottom center;
+        }
+
+        .center {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 2;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        .proposal-box {
+            position: relative;
+            background: #ffffff0d;
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 2s 2s forwards;
+            box-shadow: 0 0 30px #ff69b466;
+            z-index: 1000;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 2.5em;
+            margin: 0 0 1rem;
+            text-shadow: 0 0 10px #ff69b4;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #yesBtn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        #noBtn {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+            color: white;
+        }
+
+        @keyframes bloom {
+            0% { transform: scale(0) rotate(180deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="garden" id="garden"></div>
+    
+    <div class="proposal-box">
+        <h1>Will You Bloom With Me Forever? 💐</h1>
+        <div class="buttons">
+            <button id="yesBtn">Yes, My Love! 🌹</button>
+            <button id="noBtn">Need More Time... 🍂</button>
+        </div>
+    </div>
+
+    <script>
+        const FLOWER_TYPES = ['rose', 'sunflower', 'tulip'];
+        
+        function createFlower(x, y) {
+            const flower = document.createElement('div');
+            const type = FLOWER_TYPES[Math.floor(Math.random() * FLOWER_TYPES.length)];
+            flower.className = `flower ${type}`;
+            flower.style.left = x + 'px';
+            flower.style.top = y + 'px';
+
+            const petals = document.createElement('div');
+            petals.className = 'petals';
+            
+            // Configure based on flower type
+            let petalCount = 12;
+            if(type === 'tulip') petalCount = 6;
+            if(type === 'sunflower') petalCount = 16;
+
+            for(let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                const rotation = (i * (360 / petalCount));
+                petal.style.transform = `rotate(${rotation}deg) translateY(-15px)`;
+                
+                if(type === 'rose') {
+                    // Add multiple layers for rose
+                    const innerPetal = petal.cloneNode();
+                    innerPetal.style.transform = `rotate(${rotation}deg) translateY(-10px) scale(0.8)`;
+                    petals.appendChild(innerPetal);
+                    
+                    const outerPetal = petal.cloneNode();
+                    outerPetal.style.transform = `rotate(${rotation}deg) translateY(-20px) scale(1.2)`;
+                    petals.appendChild(outerPetal);
+                }
+                
+                petals.appendChild(petal);
+            }
+
+            const center = document.createElement('div');
+            center.className = 'center';
+            
+            flower.appendChild(petals);
+            flower.appendChild(center);
+            document.getElementById('garden').appendChild(flower);
+        }
+
+        // Create initial flowers
+        for(let i = 0; i < 15; i++) {
+            createFlower(
+                Math.random() * window.innerWidth,
+                Math.random() * window.innerHeight
+            );
+        }
+
+        // Proposal interactions
+        document.getElementById('yesBtn').addEventListener('click', () => {
+            document.querySelector('.proposal-box').innerHTML = `
+                <h1>🌸🌼 Our Love Garden Blooms! 🌻🌺<br>
+                You've Made My Heart Flourish! 💖</h1>
+            `;
+        });
+
+        let noCount = 0;
+        const responses = [
+            "Are you sure? 😢",
+            "Maybe water our love? 💧",
+            "I'll wait forever! ⏳",
+            "Pretty please? 🥺",
+            "My petals are wilting! 🥀",
+            "Let's grow together! 🌱",
+            "Final chance! 💐"
+        ];
+
+        document.getElementById('noBtn').addEventListener('click', () => {
+            const btn = document.getElementById('noBtn');
+            btn.textContent = responses[noCount % responses.length];
+            btn.style.transform = `scale(${1 + (noCount * 0.2)})`;
+            btn.style.marginLeft = `${Math.random() * 50 - 25}px`;
+            noCount++;
+        });
+
+        // Initialize flower animations
+        document.querySelectorAll('.flower').forEach(flower => {
+            flower.style.animationDelay = Math.random() * 2 + 's';
+        });
+    </script>
+</body>
+</html>
